@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Thoughts - Dua's Duality</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="nav.js"></script>
+</head>
+<body>
+
+
+    <main class="content">
+        <section class="blog-header">
+            <h2>Research Papers</h2>
+            <p>A collection of my academic work, research findings, and professional insights.</p>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search papers by title, topic, or tags..." class="search-input">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            <div class="tag-filter" id="tagFilter"></div>
+        </section>
+
+        <section class="posts-grid" id="postsGrid">
+            <a href="papers/domestic-terrorism-digital-age.html" class="post-link">
+                <article class="post-card" data-tags="policy analysis,ai & technology">
+                    <h3 class="post-title">Redefining Domestic Terrorism in the Digital Age</h3>
+                    <p class="post-subtitle">Examining the legal framework gaps in domestic terrorism prosecution and the impact of AI-generated radicalization content.</p>
+                    <div class="post-tags">
+                        <span class="tag">Policy Analysis</span>
+                        <span class="tag">AI & Technology</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/dca-collision-policy-failures.html" class="post-link">
+                <article class="post-card" data-tags="policy analysis,emergency response,incident analysis">
+                    <h3 class="post-title">The DCA Air Collision: Policy Failures and Emergency Response</h3>
+                    <p class="post-subtitle">Critical incident analysis of the 2025 aviation disaster and its implications for homeland security preparedness.</p>
+                    <div class="post-tags">
+                        <span class="tag">Policy Analysis</span>
+                        <span class="tag">Emergency Response</span>
+                        <span class="tag">Incident Analysis</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/biden-v-missouri-and-national-security.html" class="post-link">
+                <article class="post-card" data-tags="policy analysis,public health">
+                    <h3 class="post-title">Biden v. Missouri: Administrative Power in Public Health Emergencies</h3>
+                    <p class="post-subtitle">Analysis of the Supreme Court's major questions doctrine and limits on federal emergency powers.</p>
+                    <div class="post-tags">
+                        <span class="tag">Policy Analysis</span>
+                        <span class="tag">Public Health</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/japanese-internment-and-homeland-security.html" class="post-link">
+                <article class="post-card" data-tags="historical analysis,policy analysis">
+                    <h3 class="post-title">Japanese Internment: Constitutional Failures in Homeland Security</h3>
+                    <p class="post-subtitle">Historical analysis of civil liberties violations during WWII and lessons for modern homeland security policy.</p>
+                    <div class="post-tags">
+                        <span class="tag">Historical Analysis</span>
+                        <span class="tag">Policy Analysis</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/trump-privatization-analysis.html" class="post-link">
+                <article class="post-card" data-tags="public policy">
+                    <h3 class="post-title">Trump's Privatization Agenda: Corporate Profit Over Public Service</h3>
+                    <p class="post-subtitle">Analysis of how privatization policies undermine public services, reduce oversight, and destabilize American workers.</p>
+                    <div class="post-tags">
+                        <span class="tag">Public Policy</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/oldsmar-infrastructure-protection.html" class="post-link">
+                <article class="post-card" data-tags="policy analysis,incident analysis">
+                    <h3 class="post-title">The Oldsmar Incident: Policy Gaps in Infrastructure Protection</h3>
+                    <p class="post-subtitle">Analysis of the 2021 cyber incident that exposed critical vulnerabilities in water infrastructure security.</p>
+                    <div class="post-tags">
+                        <span class="tag">Policy Analysis</span>
+                        <span class="tag">Incident Analysis</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/challenger-organizational-failure.html" class="post-link">
+                <article class="post-card" data-tags="historical analysis,incident analysis">
+                    <h3 class="post-title">The Challenger Disaster: Organizational Failure and Safety Policy</h3>
+                    <p class="post-subtitle">Analysis of bureaucratic pressure, safety oversight failures, and lessons for high-risk operations.</p>
+                    <div class="post-tags">
+                        <span class="tag">Historical Analysis</span>
+                        <span class="tag">Incident Analysis</span>
+                    </div>
+                </article>
+            </a>
+
+            <a href="papers/usa-patriot-act-analysis.html" class="post-link">
+                <article class="post-card" data-tags="policy analysis,historical analysis">
+                    <h3 class="post-title">The USA PATRIOT Act: Balancing National Security and Civil Liberties</h3>
+                    <p class="post-subtitle">Critical analysis of how post-9/11 security measures impacted civil liberties and Muslim American communities.</p>
+                    <div class="post-tags">
+                        <span class="tag">Policy Analysis</span>
+                        <span class="tag">Historical Analysis</span>
+                    </div>
+                </article>
+            </a>
+        </section>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const postsGrid = document.getElementById('postsGrid');
+        const tagFilter = document.getElementById('tagFilter');
+        const allPosts = Array.from(postsGrid.querySelectorAll('.post-link'));
+
+        // Extract unique tags
+        const allTags = new Set();
+        allPosts.forEach(post => {
+            const tags = post.querySelector('.post-card').getAttribute('data-tags').split(',');
+            tags.forEach(tag => allTags.add(tag.trim()));
+        });
+
+        // Create tag buttons
+        Array.from(allTags).sort().forEach(tag => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-tag';
+            btn.textContent = tag.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            btn.onclick = () => filterByTag(tag);
+            tagFilter.appendChild(btn);
+        });
+
+        function filterByTag(tag) {
+            searchInput.value = tag;
+            filterPosts(tag);
+        }
+
+        function filterPosts(searchTerm) {
+            searchTerm = searchTerm.toLowerCase().trim();
+
+            if (searchTerm === '') {
+                allPosts.forEach(post => post.style.display = 'block');
+                return;
+            }
+
+            allPosts.forEach(post => {
+                const card = post.querySelector('.post-card');
+                const title = card.querySelector('.post-title').textContent.toLowerCase();
+                const subtitle = card.querySelector('.post-subtitle').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags').toLowerCase();
+
+                const matches = title.includes(searchTerm) ||
+                               subtitle.includes(searchTerm) ||
+                               tags.includes(searchTerm);
+
+                post.style.display = matches ? 'block' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', function() {
+            filterPosts(this.value);
+        });
+    </script>
+</body>
+</html>
